@@ -5,7 +5,9 @@ package Project::Task::ListTask;
 use strict;
 use warnings;
 
-use YAML qw/LoadFile DumpFile/;
+use Carp qw/confess/;
+use Scalar::Util qw/blessed/;
+use YAML::XS qw/LoadFile DumpFile/;
 
 use Mouse;
 extends qw/Project::Task/;
@@ -93,7 +95,7 @@ sub remove {
   }
 
   confess "$childName does not exist in list"
-    if $ind = -1;
+    if $ind == -1;
 
   # delete element from this list's contents
   delete $self->{contents}->[ $ind ];

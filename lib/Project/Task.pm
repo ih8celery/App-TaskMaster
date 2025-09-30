@@ -5,6 +5,7 @@ package Project::Task;
 use strict;
 use warnings;
 
+use Carp qw/confess/;
 use Mouse;
 
 has 'name'    => { is => 'rw', isa => 'Str' };

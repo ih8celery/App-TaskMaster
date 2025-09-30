@@ -2,6 +2,9 @@
 
 package Project::Task::SimpleTask;
 
+use strict;
+use warnings;
+
 use Mouse;
 extends qw/Project::Task/;
 

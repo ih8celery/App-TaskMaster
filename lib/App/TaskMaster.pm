@@ -5,6 +5,7 @@ package App::TaskMaster;
 use strict;
 use warnings;
 
+use Carp qw/confess/;
 use Mouse;
 extends qw/CLI::CommandLineApp/;
 
