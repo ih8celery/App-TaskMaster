@@ -4,8 +4,31 @@ package App::TaskMaster;
 
 use strict;
 use warnings;
+use v5.16;
 
 use Carp qw/confess/;
+
+# NOTE: This module is incomplete and non-functional
+# It depends on CLI::CommandLineApp which doesn't exist
+# Consider removing or completing this implementation
+
+# use Moo;
+# use Types::Standard qw/HashRef Str/;
+# extends 'CLI::CommandLineApp';
+#
+# has tasks => (
+#   is  => 'rw',
+#   isa => HashRef,
+# );
+#
+# has taskfile => (
+#   is      => 'rw',
+#   isa     => Str,
+#   default => sub { '.tasks.yml' },
+# );
+
+# Temporarily disabled - Mouse code commented out below
+
 use Mouse;
 extends qw/CLI::CommandLineApp/;
 

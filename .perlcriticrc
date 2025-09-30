@@ -1,0 +1,53 @@
+# Perl::Critic configuration for App-Devel-Todo
+# Severity levels: 1 (brutal) to 5 (gentle)
+# We use severity 4 (stern) as minimum standard
+
+severity = 4
+verbose = %f:%l:%c: [%p] %m (Severity: %s)\n
+
+# Allow postfix if/unless for simple statements
+[ControlStructures::ProhibitPostfixControls]
+allow = if unless
+
+# Allow punctuation variables if documented
+[Variables::ProhibitPunctuationVars]
+allow = $@ $! $? $0
+
+# We use Mouse/Moo which creates accessors
+[Subroutines::ProhibitBuiltinHomonyms]
+severity = 3
+
+# Allow standard block constructs
+[ControlStructures::ProhibitCascadingIfElse]
+max_elsif = 3
+
+# Allow reasonable line length (matches perltidy)
+[CodeLayout::ProhibitLongLines]
+max_characters = 100
+
+# Allow reasonable complexity
+[Subroutines::ProhibitExcessComplexity]
+max_mccabe = 20
+
+# Allow some builtin functions without strict
+[ValuesAndExpressions::ProhibitMagicNumbers]
+allowed_values = 0 1 2 -1
+
+# Module version requirements
+[Modules::RequireVersionVar]
+severity = 3
+
+# POD requirements - all public modules should have POD
+[Documentation::RequirePodSections]
+severity = 2
+
+# Allow common practices
+[InputOutput::RequireBriefOpen]
+severity = 3
+
+[Subroutines::ProhibitExplicitReturnUndef]
+severity = 3
+
+# Be reasonable about variable naming
+[NamingConventions::Capitalization]
+severity = 3

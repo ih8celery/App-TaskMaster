@@ -4,9 +4,10 @@ package Project::Task::SimpleTask;
 
 use strict;
 use warnings;
+use v5.16;
 
-use Mouse;
-extends qw/Project::Task/;
+use Moo;
+extends 'Project::Task';
 
 sub execute {
   my ($self, $action) = @_;

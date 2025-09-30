@@ -1,10 +1,30 @@
-# Name
+# App-Devel-Todo
 
-todo -- manage your todo list
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)]()
+[![Perl Version](https://img.shields.io/badge/perl-v5.16+-blue.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-    todo [global options] [subcommand] [options] [arguments]
+A powerful command-line todo list manager for developers, supporting hierarchical tasks and flexible workflows.
 
-# Summary
+## Table of Contents
+
+- [Name](#name)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Name
+
+**todo** -- manage your todo list
+
+```bash
+todo [global options] [subcommand] [options] [arguments]
+```
+
+## Summary
 
 `todo` helps you manage your todo list. your list is a YAML file, which
 does not really contain a list, but a hash table. your list is composed
@@ -63,7 +83,68 @@ looks for a user level configuration file called $HOME/.todorc.yml
 
 a project is described in a local file called .todos
 
-# Subcommands
+## Installation
+
+### From Source
+
+```bash
+git clone https://github.com/ih8celery/App-Devel-Todo.git
+cd App-Devel-Todo
+
+# Install dependencies
+cpanm --installdeps .
+
+# Or using the cpanfile
+cpanm --installdeps --cpanfile cpanfile .
+
+# Build and test
+perl Build.PL
+./Build test
+./Build install
+```
+
+### Using cpanm
+
+```bash
+# Once published to CPAN
+cpanm App::Devel::Todo
+```
+
+## Quick Start
+
+```bash
+# Show what needs to be done
+todo do
+
+# Add a task
+todo do "write documentation"
+
+# Add multiple tasks
+todo do "write code" "write tests" "deploy"
+
+# Create a project with subtasks
+todo do project. "design" "implement" "test"
+
+# Mark task as complete
+todo do -E "write code" -s did
+
+# Show completed tasks
+todo did
+```
+
+## Configuration
+
+Create `~/.todorc.yml` to customize behavior:
+
+```yaml
+verbose: 1
+default_status: do
+statuses:
+  review: "needs code review"
+  blocked: "waiting on external dependency"
+```
+
+## Subcommands
 
 before you ask, the subcommands are not in fact "commands"; the actual
 commands reside among the regular options. you may attribute this mangling
@@ -209,7 +290,67 @@ todo want -S
 
 todo do -D todo-app."implement show"
 
-# Copyright and License
+## Documentation
 
-Copyright (C) 2018 Adam Marshall.
-This software is distributed under the MIT License
+- [Architecture Documentation](ARCHITECTURE.md) - System design and internals
+- [API Documentation](API.md) - Complete API reference
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute
+- [Modernization Plan](MODERNIZATION_PLAN.md) - Project roadmap
+
+## Features
+
+- ✅ Hierarchical todo lists with unlimited nesting
+- ✅ Flexible status system (do, did, want, + custom statuses)
+- ✅ Priority and description support
+- ✅ Human-readable YAML storage
+- ✅ Command-line interface with intuitive syntax
+- ✅ User and project-level configuration
+- ✅ Comprehensive test coverage
+
+## Requirements
+
+- Perl 5.16 or higher
+- YAML::XS
+- Getopt::Long
+- Moo (for object system)
+- Type::Tiny (for type constraints)
+
+## Development
+
+```bash
+# Install development dependencies
+cpanm --installdeps --with-develop .
+
+# Run tests
+prove -l t/
+
+# Check code style
+perlcritic --severity 4 lib/
+
+# Format code
+perltidy -b lib/**/*.pm
+```
+
+## Project Status
+
+**Current Version**: 0.6.0  
+**Status**: Active Development  
+**Modernization**: Phase 2 Complete
+
+This project is being actively modernized. See [MODERNIZATION_PLAN.md](MODERNIZATION_PLAN.md) for details.
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Development setup
+- Coding standards
+- Testing guidelines
+- Pull request process
+
+## Copyright and License
+
+Copyright (C) 2018-2025 Adam Marshall.
+
+This software is distributed under the MIT License.
+
+See [LICENSE](LICENSE) for details.

@@ -1,0 +1,35 @@
+# Perl::Tidy configuration for App-Devel-Todo
+# Based on Perl Best Practices with some adjustments
+
+# Basic formatting
+--indent-columns=2
+--continuation-indentation=2
+--maximum-line-length=100
+
+# Vertical tightness
+--paren-vertical-tightness=0
+--square-bracket-vertical-tightness=0
+--brace-vertical-tightness=1
+
+# Whitespace
+--want-break-after='% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= <<= &&= -= /= |= >>= ||= //= .= %= ^= x='
+--noadd-whitespace
+--delete-old-whitespace
+
+# Comments
+--indent-block-comments
+--minimum-space-to-comment=1
+--hanging-side-comments
+
+# Line breaks
+--opening-brace-on-new-line
+--opening-sub-brace-on-new-line
+--cuddled-else
+
+# Styles
+--nooutdent-long-quotes
+--nooutdent-long-comments
+
+# Other
+--standard-output
+--warning-output

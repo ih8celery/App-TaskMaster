@@ -4,13 +4,27 @@ package Project::Task;
 
 use strict;
 use warnings;
+use v5.16;
 
 use Carp qw/confess/;
-use Mouse;
+use Moo;
+use Types::Standard qw/Str HashRef/;
 
-has 'name'    => { is => 'rw', isa => 'Str' };
-has 'summary' => { is => 'rw', isa => 'Str' };
-has 'taglist' => { is => 'bare', isa => 'HashRef' };
+has name => (
+  is  => 'rw',
+  isa => Str,
+);
+
+has summary => (
+  is  => 'rw',
+  isa => Str,
+);
+
+has taglist => (
+  is      => 'bare',
+  isa     => HashRef,
+  default => sub { {} },
+);
 
 sub tag {
   my ($self, $tagname) = @_;

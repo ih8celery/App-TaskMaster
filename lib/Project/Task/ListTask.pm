@@ -4,15 +4,20 @@ package Project::Task::ListTask;
 
 use strict;
 use warnings;
+use v5.16;
 
 use Carp qw/confess/;
 use Scalar::Util qw/blessed/;
 use YAML::XS qw/LoadFile DumpFile/;
 
-use Mouse;
-extends qw/Project::Task/;
+use Moo;
+use Types::Standard qw/ArrayRef/;
+extends 'Project::Task';
 
-has 'contents' => { is => 'rw', isa => 'ArrayRef' };
+has contents => (
+  is  => 'rw',
+  isa => ArrayRef,
+);
 
 # given list of names, find a ListTask under $self
 sub find {
