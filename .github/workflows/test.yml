@@ -1,0 +1,90 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on Perl ${{ matrix.perl }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        perl:
+          - '5.38'
+          - '5.36'
+          - '5.34'
+          - '5.32'
+          - '5.30'
+          - '5.28'
+          - '5.26'
+          - '5.24'
+          - '5.22'
+          - '5.20'
+          - '5.18'
+          - '5.16'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      
+      - name: Show Perl version
+        run: perl -V
+      
+      - name: Install cpanm
+        run: |
+          curl -L https://cpanmin.us | perl - App::cpanminus
+      
+      - name: Install dependencies
+        run: |
+          cpanm --notest --installdeps .
+      
+      - name: Run tests
+        run: |
+          prove -l t/
+      
+      - name: Test coverage info
+        if: matrix.perl == '5.38'
+        run: |
+          cpanm --notest Devel::Cover Devel::Cover::Report::Coveralls
+          cover -test -report coveralls
+  
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+      
+      - name: Install Module::Build
+        run: |
+          cpanm --notest Module::Build
+      
+      - name: Install dependencies
+        run: |
+          cpanm --notest --installdeps .
+      
+      - name: Build distribution
+        run: |
+          perl Build.PL
+          ./Build dist
+      
+      - name: Check dist contents
+        run: |
+          tar -tzf App-Devel-Todo-*.tar.gz | head -20

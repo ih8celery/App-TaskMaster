@@ -1,8 +1,44 @@
-.todos
+# Perl
+*.swp
+*.bak
+*.old
+*~
+.prove
+
+# Build artifacts
 Build
-MYMETA.json
-MYMETA.json.lock
-MYMETA.yml
 _build/
 blib/
+*.tar.gz
+*.tgz
+App-Devel-Todo-*
+
+# Coverage
 cover_db/
+*.gcov
+*.gcda
+*.gcno
+
+# Module::Build
+Build.bat
+MYMETA.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Test files
+t/*.tmp
+*.log
+
+# Local configuration
+.todos
+.todorc.yml

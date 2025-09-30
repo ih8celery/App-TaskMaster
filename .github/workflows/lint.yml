@@ -1,0 +1,115 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  perlcritic:
+    name: Perl::Critic
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+      
+      - name: Install Perl::Critic
+        run: |
+          cpanm --notest Perl::Critic
+      
+      - name: Run Perl::Critic
+        run: |
+          perlcritic --severity 4 --verbose "%f:%l:%c: [%p] %m (Severity: %s)\n" lib/ bin/ || true
+      
+      - name: Run Perl::Critic (strict)
+        run: |
+          echo "Running strict check (severity 3)..."
+          perlcritic --severity 3 lib/ bin/ || echo "Some severity 3 violations found (non-blocking)"
+  
+  perltidy:
+    name: Perl::Tidy Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+      
+      - name: Install Perl::Tidy
+        run: |
+          cpanm --notest Perl::Tidy
+      
+      - name: Check formatting
+        run: |
+          # Check if code needs reformatting
+          echo "Checking Perl code formatting..."
+          find lib bin -name '*.pm' -o -name 'todo' | while read file; do
+            perltidy --profile=.perltidyrc -st "$file" | diff -u "$file" - || {
+              echo "❌ $file needs reformatting"
+              exit 1
+            }
+          done || {
+            echo "ℹ️  Some files need reformatting. Run: perltidy -b lib/**/*.pm bin/todo"
+            exit 0
+          }
+          echo "✅ All files are properly formatted"
+  
+  pod:
+    name: POD Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+      
+      - name: Install POD checkers
+        run: |
+          cpanm --notest Test::Pod Test::Pod::Coverage Pod::Coverage
+      
+      - name: Check POD syntax
+        run: |
+          perl -MTest::Pod -e 'all_pod_files_ok()'
+      
+      - name: Check POD coverage
+        run: |
+          perl -MTest::Pod::Coverage -e 'all_pod_coverage_ok()' || echo "Some POD coverage gaps (non-blocking)"
+  
+  dependencies:
+    name: Dependency Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.38'
+      
+      - name: Check cpanfile syntax
+        run: |
+          cpanm --notest Module::CPANfile
+          perl -MModule::CPANfile -e 'Module::CPANfile->load("cpanfile")'
+      
+      - name: List dependencies
+        run: |
+          echo "=== Runtime Dependencies ==="
+          perl -MModule::CPANfile -e 'my $f = Module::CPANfile->load("cpanfile"); for my $m ($f->merged_requirements->required_modules) { print "$m: ", $f->merged_requirements->requirements_for_module($m)->as_string, "\n" }'
